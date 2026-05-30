@@ -28,7 +28,8 @@
 
   /* MENU */
   #menu { justify-content: center; min-height: 100vh; padding: 40px 20px; gap: 30px; }
-  .logo-wrap img { max-width: 200px; filter: drop-shadow(0 0 30px rgba(212,168,83,0.4)); }
+  .logo-wrap { display: flex; flex-direction: column; align-items: center; }
+  .logo-wrap img { max-width: 200px; filter: drop-shadow(0 0 30px rgba(212,168,83,0.4)); display: block; margin: 0 auto; }
   .logo-wrap h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; color: var(--ouro); text-align: center; }
   .logo-wrap p { text-align: center; color: #a89060; font-style: italic; margin-top: 6px; }
 
@@ -57,30 +58,42 @@
   .team-setup-box input::placeholder { color: #6b5030; }
 
   /* HANDOFF SCREEN */
-  #handoff { min-height: 100vh; justify-content: center; padding: 40px 20px; gap: 30px; }
+  #handoff { min-height: 100vh; justify-content: center; padding: 40px 20px; gap: 30px; background: #0e0a04; }
   .handoff-card {
-    background: #231810;
-    border-radius: 16px;
-    padding: 40px 50px;
+    background: #1c1208;
+    border-radius: 20px;
+    padding: 48px 50px;
     text-align: center;
     max-width: 480px;
     width: 100%;
-    border: 1px solid rgba(212,168,83,0.3);
-    box-shadow: 0 0 60px rgba(0,0,0,0.8);
-    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    border: 2px solid rgba(212,168,83,0.5);
+    box-shadow: 0 0 80px rgba(212,168,83,0.15), 0 0 0 1px rgba(212,168,83,0.1);
+    display: flex; flex-direction: column; align-items: center; gap: 22px;
   }
-  .handoff-emoji { font-size: 3.5rem; }
-  .handoff-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--ouro); }
-  .handoff-sub { color: #a89060; font-style: italic; font-size: 0.95rem; line-height: 1.5; }
-  .handoff-team-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .handoff-emoji { font-size: 4rem; }
+  .handoff-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--ouro); }
+  .handoff-sub { color: #c0a870; font-style: italic; font-size: 1rem; line-height: 1.7; }
+  .handoff-team-badge { display: inline-block; padding: 6px 20px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
   .handoff-team-a { background: rgba(100,160,220,0.2); border: 1px solid rgba(100,160,220,0.5); color: #6ab0f5; }
   .handoff-team-b { background: rgba(220,100,100,0.2); border: 1px solid rgba(220,100,100,0.5); color: #f57070; }
+  .handoff-warning { background: rgba(212,168,83,0.08); border: 1px solid rgba(212,168,83,0.25); border-radius: 8px; padding: 12px 18px; font-size: 0.82rem; color: #a89060; line-height: 1.5; }
 
   /* GAME */
   #game { min-height: 100vh; padding: 10px; gap: 8px; justify-content: flex-start; }
   .game-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1000px; padding: 8px 0; border-bottom: 1px solid rgba(212,168,83,0.2); flex-wrap: wrap; gap: 8px; }
   .game-header .title { font-family: 'Playfair Display', serif; color: var(--ouro); font-size: 1.1rem; font-weight: 700; }
   .deck-count { color: #a89060; font-size: 0.85rem; }
+  .active-player-strip {
+    width: 100%; max-width: 1000px;
+    border-radius: 6px;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: -2px;
+  }
+  .active-strip-a { background: rgba(100,160,220,0.12); border: 1px solid rgba(100,160,220,0.4); color: #6ab0f5; }
+  .active-strip-b { background: rgba(220,100,100,0.12); border: 1px solid rgba(220,100,100,0.4); color: #f57070; }
 
   /* PHASE BANNER — big clear indicator */
   .phase-banner {
@@ -226,7 +239,8 @@
     <div class="handoff-emoji" id="handoffEmoji">🍽️</div>
     <div id="handoffTeamBadge"></div>
     <div class="handoff-title" id="handoffName">Jogador</div>
-    <div class="handoff-sub" id="handoffSub">Passa o telemóvel ao próximo jogador.<br>Quando estiveres pronto, carrega em jogar.</div>
+    <div class="handoff-warning">⚠️ Os outros jogadores <strong>não devem ver</strong> este ecrã.<br>Passa o telemóvel a <strong id="handoffNameRepeat">—</strong> e espera que ele/ela esteja pronto.</div>
+    <div class="handoff-sub" id="handoffSub">Quando estiveres pronto e sozinho(a), carrega no botão.</div>
     <button class="btn" id="handoffBtn" onclick="revealHand()">Ver a minha mão 🃏</button>
   </div>
 </div>
@@ -241,6 +255,8 @@
       <button class="btn danger sm" onclick="askEndGame()">Terminar</button>
     </div>
   </div>
+
+  <div class="active-player-strip" id="activePlayerStrip"></div>
 
   <div class="phase-banner" id="phaseBanner">
     <div class="phase-icon" id="phaseIcon">🃏</div>
@@ -353,27 +369,37 @@ const COLOR_CLASS = {carne:'color-carne',peixe:'color-peixe',fruta:'color-fruta'
 
 function mc(color,name,pts,img,special){ return {color,name,pts,img,special:special||null}; }
 
+// Deck: 4 colors × 14 cards each = 56 + 14 preto (neg) + 7 especial = 77 total
+// Per color: 1pts×4, 2pts×4, 3pts×3, 4pts×2, 5pts×1 = 14
+// Preto (negative): -1×4, -2×4, -3×3, -4×2, -5×1 = 14 (Bolo Rei is the -5)
+// Especial: Garfada Discreta×2, Tempero da Avó×3, Mesa do Lado×1, Fechar o Tasco×1 = 7
 const DECK_TEMPLATE = [
+  // CARNE (14)
   mc('carne','Rissol',1,'carne'),mc('carne','Rissol',1,'carne'),mc('carne','Rissol',1,'carne'),mc('carne','Rissol',1,'carne'),
   mc('carne','Bifana',2,'carne'),mc('carne','Bifana',2,'carne'),mc('carne','Bifana',2,'carne'),mc('carne','Bifana',2,'carne'),
   mc('carne','Porco Alentejano',3,'carne'),mc('carne','Porco Alentejano',3,'carne'),mc('carne','Porco Alentejano',3,'carne'),
   mc('carne','Cozido',4,'carne'),mc('carne','Cozido',4,'carne'),mc('carne','Francesinha',5,'carne'),
+  // PEIXE (14)
   mc('peixe','Bolinho Bacalhau',1,'peixe'),mc('peixe','Bolinho Bacalhau',1,'peixe'),mc('peixe','Bolinho Bacalhau',1,'peixe'),mc('peixe','Bolinho Bacalhau',1,'peixe'),
   mc('peixe','Filetes',2,'peixe'),mc('peixe','Filetes',2,'peixe'),mc('peixe','Filetes',2,'peixe'),mc('peixe','Filetes',2,'peixe'),
   mc('peixe','Sardinha',3,'peixe'),mc('peixe','Sardinha',3,'peixe'),mc('peixe','Sardinha',3,'peixe'),
   mc('peixe','Polvo Lagareiro',4,'peixe'),mc('peixe','Polvo Lagareiro',4,'peixe'),mc('peixe','Bacalhau c/ Natas',5,'peixe'),
+  // FRUTA (14)
   mc('fruta','Maçã',1,'fruta'),mc('fruta','Maçã',1,'fruta'),mc('fruta','Maçã',1,'fruta'),mc('fruta','Maçã',1,'fruta'),
   mc('fruta','Banana',2,'fruta'),mc('fruta','Banana',2,'fruta'),mc('fruta','Banana',2,'fruta'),mc('fruta','Banana',2,'fruta'),
   mc('fruta','Morango',3,'fruta'),mc('fruta','Morango',3,'fruta'),mc('fruta','Morango',3,'fruta'),
   mc('fruta','Salada de Fruta',4,'fruta'),mc('fruta','Salada de Fruta',4,'fruta'),mc('fruta','Maçã Assada',5,'fruta'),
+  // VERDURAS (14)
   mc('verduras','Alface',1,'verduras'),mc('verduras','Alface',1,'verduras'),mc('verduras','Alface',1,'verduras'),mc('verduras','Alface',1,'verduras'),
   mc('verduras','Tomate',2,'verduras'),mc('verduras','Tomate',2,'verduras'),mc('verduras','Tomate',2,'verduras'),mc('verduras','Tomate',2,'verduras'),
   mc('verduras','Pepino',3,'verduras'),mc('verduras','Pepino',3,'verduras'),mc('verduras','Pepino',3,'verduras'),
   mc('verduras','Salada',4,'verduras'),mc('verduras','Salada',4,'verduras'),mc('verduras','Caldo Verde',5,'verduras'),
+  // PRETO / SOBREMESAS (14): -1×4, -2×4, -3×3, -4×2, -5×1 (Bolo Rei)
   mc('preto','Ovos Moles',-1,'doces'),mc('preto','Ovos Moles',-1,'doces'),mc('preto','Ovos Moles',-1,'doces'),mc('preto','Ovos Moles',-1,'doces'),
   mc('preto','Húngaros',-2,'doces'),mc('preto','Húngaros',-2,'doces'),mc('preto','Húngaros',-2,'doces'),mc('preto','Húngaros',-2,'doces'),
   mc('preto','Pastel de Nata',-3,'doces'),mc('preto','Pastel de Nata',-3,'doces'),mc('preto','Pastel de Nata',-3,'doces'),
   mc('preto','Pudim',-4,'doces'),mc('preto','Pudim',-4,'doces'),mc('preto','Bolo Rei',-5,'doces','bolorei'),
+  // ESPECIAIS (7)
   mc('especial','Garfada Discreta',0,'especial','garfada'),mc('especial','Garfada Discreta',0,'especial','garfada'),
   mc('especial','Tempero da Avó',0,'especial','tempero'),mc('especial','Tempero da Avó',0,'especial','tempero'),mc('especial','Tempero da Avó',0,'especial','tempero'),
   mc('especial','Mesa do Lado',0,'especial','mesa'),mc('especial','Fechar o Tasco',0,'especial','fechar'),
@@ -405,7 +431,7 @@ function showHandoff() {
   const isA = cp.team === 'A';
   document.getElementById('handoffEmoji').textContent = isA ? '🔵' : '🔴';
   document.getElementById('handoffName').textContent = cp.name;
-  document.getElementById('handoffSub').textContent = 'Passa o telemóvel a ' + cp.name + '.\nQuando estiveres pronto, carrega em jogar.';
+  const nameRepeat = document.getElementById('handoffNameRepeat'); if (nameRepeat) nameRepeat.textContent = cp.name;
   const badge = document.getElementById('handoffTeamBadge');
   badge.className = 'handoff-team-badge handoff-team-' + (isA ? 'a' : 'b');
   badge.textContent = 'Equipa ' + cp.team;
@@ -458,6 +484,13 @@ function renderGame() {
 
   phaseBadge.textContent = cp.name + ' · Equipa ' + cp.team;
   phaseBadge.className = 'phase-player-badge phase-' + (isA?'a':'b');
+
+  // Active player strip
+  const strip = document.getElementById('activePlayerStrip');
+  if (strip) {
+    strip.className = 'active-player-strip active-strip-' + (isA?'a':'b');
+    strip.innerHTML = (isA ? '🔵' : '🔴') + ' <strong>Vez de ' + cp.name + '</strong>  ·  Equipa ' + cp.team;
+  }
 
   if (G.selectedCard === null) {
     banner.className = 'phase-banner phase-select';
@@ -643,6 +676,8 @@ function confirmEndGame() {
 }
 
 function showEndGame() {
+  // Make sure end modal is visible regardless of current screen
+  showScreen('game');
   const sA=getTeamScore('A'), sB=getTeamScore('B');
   const winTeam = sA<=sB ? 'A' : 'B';
   const tbl=document.getElementById('endScoresTable');
@@ -663,7 +698,9 @@ function showEndGame() {
 }
 
 document.querySelectorAll('.modal-overlay').forEach(m=>{
-  m.addEventListener('click',e=>{ if(e.target===m && m.id!=='endModal') m.classList.remove('open'); });
+  m.addEventListener('click',e=>{ 
+    if(e.target===m && m.id!=='endModal' && m.id!=='confirmModal') m.classList.remove('open'); 
+  });
 });
 </script>
 </body>
